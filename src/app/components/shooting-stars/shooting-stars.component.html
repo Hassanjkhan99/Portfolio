@@ -1,0 +1,11 @@
+<div class="shooting-stars-container">
+  <div
+    *ngFor="let star of shootingStars"
+    [style.top]="star.top + 'px'"
+    [style.left]="star.left + 'px'"
+    [style.width]="star.size + 'px'"
+    [style.height]="star.size + 'px'"
+    [style.background-color]="star.color"
+    class="shooting-star"
+  ></div>
+</div>

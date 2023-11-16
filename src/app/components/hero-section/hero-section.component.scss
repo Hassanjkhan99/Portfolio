@@ -1,0 +1,19 @@
+.centered-text {
+  font-family: "Poppins ExtraBold", sans-serif;
+  /* Apply gradient background to the text */
+  background: linear-gradient(to right, #ffffff, rgb(217 95 228), #aabbff, #ffd21f, #dfd21f, rgb(53 70 142));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+h1,h3{
+  font-family: "Frenklins ", sans-serif;
+}
+.hero-text{
+  background: black;
+  padding: 10px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
