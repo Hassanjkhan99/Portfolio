@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Navigation } from './components/Navigation'
-import { Hero } from './sections/Hero'
+import { HomePage } from './sections/HomePage'
+import { TechStack } from './sections/TechStack'
+import { AboutMe } from './sections/AboutMe'
 import { Projects } from './sections/Projects'
-import { Testimonials } from './sections/Testimonials'
+import { Contact } from './sections/Contact'
 import { Footer } from './components/Footer'
 import './index.css'
+
 
 function App() {
   const [isDark, setIsDark] = useState(true)
@@ -26,9 +29,11 @@ function App() {
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       <Navigation isDark={isDark} onToggleTheme={toggleTheme} />
       <main>
-        <Hero />
+        <HomePage />
+        <TechStack />
+        <AboutMe />
         <Projects />
-        <Testimonials />
+        <Contact />
       </main>
       <Footer />
     </div>

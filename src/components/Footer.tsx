@@ -1,9 +1,90 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from './ui/button'
-import { Github, Linkedin, Mail, Download, ArrowUp } from 'lucide-react'
+import { Github, Linkedin, Mail, Download, ArrowUp, Heart } from 'lucide-react'
 import { navigation, socialLinks } from '../constants/data'
 import { scrollToSection } from '../lib/utils'
+
+// Animated Particles Background Component
+const AnimatedParticles: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth
+      canvas.height = 200 // Footer height
+    }
+    resizeCanvas()
+    window.addEventListener('resize', resizeCanvas)
+
+    // Floating particles
+    const particles: Array<{ x: number; y: number; size: number; speedY: number; opacity: number }> = []
+    const numParticles = 20
+
+    // Initialize particles
+    for (let i = 0; i < numParticles; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: canvas.height + Math.random() * 50,
+        size: Math.random() * 2 + 1,
+        speedY: -Math.random() * 0.5 - 0.2,
+        opacity: Math.random() * 0.5 + 0.2
+      })
+    }
+
+    // Animation loop
+    let animationId: number
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // Update and draw particles
+      particles.forEach(particle => {
+        particle.y += particle.speedY
+
+        // Reset particle when it goes off screen
+        if (particle.y < -10) {
+          particle.y = canvas.height + 10
+          particle.x = Math.random() * canvas.width
+        }
+
+        // Draw particle
+        ctx.save()
+        ctx.globalAlpha = particle.opacity
+        ctx.fillStyle = '#a855f7'
+        ctx.shadowColor = '#a855f7'
+        ctx.shadowBlur = 5
+        ctx.beginPath()
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.restore()
+      })
+
+      animationId = requestAnimationFrame(animate)
+    }
+
+    animate()
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas)
+      cancelAnimationFrame(animationId)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 0 }}
+    />
+  )
+}
 
 export const Footer: React.FC = () => {
   const getSocialIcon = (icon: string) => {
@@ -24,8 +105,11 @@ export const Footer: React.FC = () => {
   }
 
   return (
-    <footer className="bg-gray-900 dark:bg-black text-white">
-      <div className="container-custom py-16">
+    <footer className="relative bg-gray-900 dark:bg-black text-white overflow-hidden">
+      {/* Animated Particles Background */}
+      <AnimatedParticles />
+      
+      <div className="relative z-10 container-custom py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Contact Info */}
           <motion.div
@@ -125,7 +209,17 @@ export const Footer: React.FC = () => {
           className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center"
         >
           <div className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2024 Portfolio. All rights reserved.
+            <div className="flex items-center gap-2">
+              <span>Made by Muhammad Hassan with</span>
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1, repeat: Infinity }}
+              >
+                <Heart className="h-4 w-4 text-red-500" />
+              </motion.div>
+              <span>using React, Three.js, shadcn/ui, and Tailwind CSS</span>
+            </div>
+            <div className="mt-1">© 2024 Portfolio. All rights reserved.</div>
           </div>
           
           <div className="flex items-center space-x-4">

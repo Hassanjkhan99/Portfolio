@@ -14,10 +14,28 @@ interface NavigationProps {
 export const Navigation: React.FC<NavigationProps> = ({ isDark, onToggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState('home')
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
+      
+      // Active section detection
+      const sections = ['home', 'tech-stack-section', 'about', 'projects', 'contact']
+      const scrollPosition = window.scrollY + 100
+      
+      for (const section of sections) {
+        const element = document.getElementById(section)
+        if (element) {
+          const offsetTop = element.offsetTop
+          const offsetHeight = element.offsetHeight
+          
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section)
+            break
+          }
+        }
+      }
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -45,9 +63,9 @@ export const Navigation: React.FC<NavigationProps> = ({ isDark, onToggleTheme })
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled 
-          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700' 
+          ? 'bg-white/5 dark:bg-gray-900/5 backdrop-blur-xl border-b border-white/10 dark:border-gray-700/30 shadow-2xl shadow-purple-500/10' 
           : 'bg-transparent'
       }`}
     >
@@ -64,17 +82,32 @@ export const Navigation: React.FC<NavigationProps> = ({ isDark, onToggleTheme })
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <motion.button
-                key={item.name}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors duration-200 font-medium"
-                onClick={() => handleNavClick(item.href)}
-              >
-                {item.name}
-              </motion.button>
-            ))}
+            {navigation.map((item) => {
+              const isActive = activeSection === item.href.replace('#', '')
+              return (
+                <motion.button
+                  key={item.name}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`relative font-medium transition-all duration-300 ${
+                    isActive 
+                      ? 'text-purple-400 dark:text-purple-300' 
+                      : 'text-gray-700 dark:text-gray-300 hover:text-purple-400 dark:hover:text-purple-300'
+                  }`}
+                  onClick={() => handleNavClick(item.href)}
+                >
+                  {item.name}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </motion.button>
+              )
+            })}
           </div>
 
           {/* Desktop Actions */}
@@ -106,12 +139,18 @@ export const Navigation: React.FC<NavigationProps> = ({ isDark, onToggleTheme })
             </Toggle>
 
             {/* Contact Button */}
-            <Button
-              variant="outline"
-              onClick={() => handleNavClick('#contact')}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Get In Touch
-            </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleNavClick('#contact')}
+                className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 hover:from-purple-500/30 hover:to-pink-500/30 hover:border-purple-500/50 backdrop-blur-sm"
+              >
+                Get In Touch
+              </Button>
+            </motion.div>
           </div>
 
           {/* Mobile Menu Button */}

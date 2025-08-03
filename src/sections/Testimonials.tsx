@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent } from '../components/ui/card'
 import { Button } from '../components/ui/button'
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react'
-import { testimonials, Testimonial } from '../constants/data'
+import { testimonials } from '../constants/data'
+import type { Testimonial } from '../constants/data'
 import { getInitials } from '../lib/utils'
 
 export const Testimonials: React.FC = () => {
@@ -83,7 +84,7 @@ export const Testimonials: React.FC = () => {
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={1}
-              onDragEnd={(e, { offset, velocity }) => {
+              onDragEnd={(_, { offset, velocity }) => {
                 const swipe = swipePower(offset.x, velocity.x)
 
                 if (swipe < -swipeConfidenceThreshold) {
@@ -146,7 +147,7 @@ export const Testimonials: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="hidden lg:grid grid-cols-3 gap-8 mt-16"
         >
-          {testimonials.map((testimonial, index) => (
+          {testimonials.map((testimonial) => (
             <TestimonialCard key={testimonial.id} testimonial={testimonial} />
           ))}
         </motion.div>

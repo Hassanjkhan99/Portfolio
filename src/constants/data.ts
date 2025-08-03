@@ -128,9 +128,9 @@ export const skills: Skill[] = [
 
 export const navigation = [
   { name: 'Home', href: '#home' },
+  { name: 'Tech Stack', href: '#tech-stack-section' },
   { name: 'About', href: '#about' },
   { name: 'Projects', href: '#projects' },
-  { name: 'Skills', href: '#skills' },
   { name: 'Contact', href: '#contact' }
 ]
 
