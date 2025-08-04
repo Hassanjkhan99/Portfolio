@@ -1,43 +1,56 @@
 // 🚀 TYPEWRITER TEXT COMPONENT
-// Animated typewriter effect for text
+// Robust typewriter effect using typewriter-effect library
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
+import Typewriter from 'typewriter-effect'
 
 interface TypewriterTextProps {
-  text: string
+  text: string | string[]
   delay?: number
+  speed?: number
+  loop?: boolean
+  cursor?: string
+  cursorClassName?: string
+  wrapperClassName?: string
+  onComplete?: () => void
+  onStart?: () => void
 }
 
-export const TypewriterText: React.FC<TypewriterTextProps> = ({ text, delay = 0 }) => {
-  const [displayText, setDisplayText] = useState('')
-  const [currentIndex, setCurrentIndex] = useState(0)
-
-  useEffect(() => {
-    if (currentIndex < text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayText(prev => prev + text[currentIndex])
-        setCurrentIndex(prev => prev + 1)
-      }, 100)
-      return () => clearTimeout(timeout)
-    }
-  }, [currentIndex, text])
+export const TypewriterText: React.FC<TypewriterTextProps> = ({ 
+  text, 
+  delay = 0, 
+  speed = 50,
+  loop = false,
+  cursor = '|',
+  cursorClassName = 'text-purple-400 font-mono',
+  wrapperClassName = 'inline-block',
+  onComplete,
+  onStart
+}) => {
+  const options = {
+    strings: typeof text === 'string' ? [text] : text,
+    autoStart: true,
+    loop: loop,
+    delay: speed,
+    deleteSpeed: speed * 0.5,
+    cursor: cursor,
+    cursorClassName: cursorClassName,
+    wrapperClassName: wrapperClassName,
+    onComplete: onComplete,
+    onStart: onStart,
+  }
 
   return (
-    <motion.span
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay }}
-      className="inline-block"
+      transition={{ delay: delay * 0.5, duration: 0.3 }}
+      className={wrapperClassName}
     >
-      {displayText}
-      <motion.span
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.5, repeat: Infinity }}
-        className="ml-1 text-purple-400"
-      >
-        |
-      </motion.span>
-    </motion.span>
+      <Typewriter
+        options={options}
+      />
+    </motion.div>
   )
 } 

@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, useScroll } from 'framer-motion'
 
 // Import data
-import { typewriterTexts } from './home/data'
+// typewriterTexts is now handled by RotatingTypewriter component
 
 // Import components
 import {
@@ -155,17 +155,9 @@ const ScrollProgress: React.FC = () => {
 }
 
 export const HomePage: React.FC = () => {
-  const [currentTextIndex, setCurrentTextIndex] = useState(0)
   const [showConfetti, setShowConfetti] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTextIndex(prev => (prev + 1) % typewriterTexts.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -218,7 +210,6 @@ export const HomePage: React.FC = () => {
             transition={{ duration: 1 }}
           >
             <HeroSection 
-              currentTextIndex={currentTextIndex}
               onDownloadCV={handleDownloadCV}
             />
           </motion.div>

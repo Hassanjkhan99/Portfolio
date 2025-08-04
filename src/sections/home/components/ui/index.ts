@@ -3,4 +3,5 @@
 
 export { EnhancedButton } from './EnhancedButton'
 export { SocialIcon } from './SocialIcon'
-export { TypewriterText } from './TypewriterText' 
+export { TypewriterText } from './TypewriterText'
+export { RotatingTypewriter } from './RotatingTypewriter' 
