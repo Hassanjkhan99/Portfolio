@@ -11,9 +11,8 @@ import { motion, useScroll } from 'framer-motion'
 import {
   AnimatedBackground,
   ParticlesBackground,
-  ConfettiEffect,
-  HeroSection,
 } from './home/components'
+import Hero from './Hero'
 
 // Enhanced Floating Artifacts Component
 const FloatingArtifacts: React.FC = () => {
@@ -155,7 +154,6 @@ const ScrollProgress: React.FC = () => {
 }
 
 export const HomePage: React.FC = () => {
-  const [showConfetti, setShowConfetti] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
 
@@ -176,11 +174,7 @@ export const HomePage: React.FC = () => {
     return () => observer.disconnect()
   }, [])
 
-  const handleDownloadCV = () => {
-    setShowConfetti(true)
-    setTimeout(() => setShowConfetti(false), 2000)
-    // Add actual CV download logic here
-  }
+
 
   return (
     <div ref={sectionRef} className="min-h-screen relative overflow-hidden">
@@ -209,15 +203,12 @@ export const HomePage: React.FC = () => {
             animate={isVisible ? { opacity: 1 } : {}}
             transition={{ duration: 1 }}
           >
-            <HeroSection 
-              onDownloadCV={handleDownloadCV}
-            />
+            <Hero />
           </motion.div>
         </div>
       </div>
 
-      {/* Confetti Effect */}
-      <ConfettiEffect show={showConfetti} />
+
 
       {/* Enhanced Background Glow */}
       <motion.div
